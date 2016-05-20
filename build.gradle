@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+
+    id 'idea'
+    id 'eclipse'
+
+    id 'org.spongepowered.plugin' version '0.5.2'
+    id 'net.minecrell.licenser' version '0.2'
+    id 'net.minecrell.gitpatcher' version '0.8'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+defaultTasks 'licenseFormat'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group 'net.caseif.flint'
+archivesBaseName = project.name.toLowerCase()
+version '1.0.0-SNAPSHOT'
+
+patches {
+    submodule = 'lib/FlintCommon'
+    target = file('FlintCommon')
+    patches = file('patches')
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name 'sponge'
+        url 'http://repo.spongepowered.org/maven'
+    }
+}
+
+dependencies {
+    compile 'org.spongepowered:spongeapi:4.0.3'
+    //compile project(':FlintCommon')
+}
+
+license {
+    header file('HEADER.txt')
+    include '**/*.java'
+}
+
+jar {
+    classifier = 'base'
+}
+
+shadowJar {
+    classifier = ''
+}
+
+artifacts {
+    archives shadowJar
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+}
